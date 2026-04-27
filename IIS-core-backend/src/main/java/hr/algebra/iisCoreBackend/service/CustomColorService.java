@@ -5,6 +5,7 @@ import hr.algebra.iisCoreBackend.model.Color;
 import hr.algebra.iisCoreBackend.repository.ColorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class CustomColorService implements ColorService {
     }
 
     @Override
+    @PreAuthorize("hasRole('Admin')")
     public ColorDTO save(ColorDTO colorDto) {
         var existingColorOpt = colorRepository.findById(colorDto.getId());
 
@@ -52,6 +54,7 @@ public class CustomColorService implements ColorService {
     }
 
     @Override
+    @PreAuthorize("hasRole('Admin')")
     public ColorDTO update(Long id, ColorDTO colorDto) {
         Color existing = colorRepository.findById(id.intValue())
                 .orElseThrow(() -> new RuntimeException("Color not found with id: " + id));
@@ -65,6 +68,7 @@ public class CustomColorService implements ColorService {
     }
 
     @Override
+    @PreAuthorize("hasRole('Admin')")
     public void delete(Long id) {
         Color existing = colorRepository.findById(id.intValue())
                 .orElseThrow(() -> new RuntimeException("Color not found"));
