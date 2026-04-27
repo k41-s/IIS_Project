@@ -10,14 +10,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class RestColorsUiState(
-    val colors: List<ColorDTO> = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null,
-    val showCreateDialog: Boolean = false,
-    val colorToUpdate: ColorDTO? = null
-)
-
 class RestColorsViewModel(
     private val colorApi: ColorApi
 ) : ViewModel() {
@@ -40,11 +32,11 @@ class RestColorsViewModel(
         }
     }
 
-    fun showDialog() {
+    fun showCreateDialog() {
         _uiState.update { it.copy(showCreateDialog = true) }
     }
 
-    fun hideDialog() {
+    fun hideCreateDialog() {
         _uiState.update { it.copy(showCreateDialog = false) }
     }
 
@@ -61,7 +53,7 @@ class RestColorsViewModel(
         viewModelScope.launch {
             try {
                 colorApi.createColor(color)
-                fetchColors() // Refresh list with newly created color
+                fetchColors()
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = "Failed to create color: ${e.message}", isLoading = false) }
             }
@@ -88,6 +80,27 @@ class RestColorsViewModel(
                 fetchColors()
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = "Failed to delete color: ${e.message}", isLoading = false) }
+            }
+        }
+    }
+
+    fun showValidateDialog() {
+        _uiState.update { it.copy(showValidateDialog = true, validationMessage = null) }
+    }
+
+    fun hideValidateDialog() {
+        _uiState.update { it.copy(showValidateDialog = false) }
+    }
+
+    fun validateAndSave(payload: String, isXml: Boolean) {
+        _uiState.update { it.copy(isLoading = true, validationMessage = "Validating...") }
+        viewModelScope.launch {
+            try {
+                colorApi.validateAndSave(payload, isXml)
+                _uiState.update { it.copy(validationMessage = "Success: Data validated and saved!", isLoading = false) }
+                fetchColors()
+            } catch (e: Exception) {
+                _uiState.update { it.copy(validationMessage = "Validation Failed: ${e.message}", isLoading = false) }
             }
         }
     }

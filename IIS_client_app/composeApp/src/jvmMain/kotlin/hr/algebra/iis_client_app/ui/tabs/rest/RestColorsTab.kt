@@ -27,8 +27,16 @@ fun RestColorsTab() {
 
     if (uiState.showCreateDialog) {
         CreateColorDialog(
-            onDismiss = viewModel::hideDialog,
+            onDismiss = viewModel::hideCreateDialog,
             onCreate = viewModel::createColor
+        )
+    }
+
+    if (uiState.showValidateDialog) {
+        ValidateAndSaveDialog(
+            onDismiss = viewModel::hideValidateDialog,
+            onSubmit = viewModel::validateAndSave,
+            validationMessage = uiState.validationMessage
         )
     }
 
@@ -41,38 +49,56 @@ fun RestColorsTab() {
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("REST Colors API", style = MaterialTheme.typography.titleLarge)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("REST Colors API", style = MaterialTheme.typography.titleLarge)
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Switch API mode:", style = MaterialTheme.typography.bodyLarge)
+                    Spacer(Modifier.width(8.dp))
+                    Switch(
+                        checked = state.apiMode == ApiMode.CUSTOM,
+                        onCheckedChange = { globalAppState.toggleApiMode() },
+                        modifier = Modifier.padding(end = 16.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Button(onClick = viewModel::fetchColors, enabled = !uiState.isLoading) {
                     Text("Refresh")
                 }
 
                 if (state.role.canEdit && state.apiMode == ApiMode.CUSTOM) {
                     Button(
-                        onClick = viewModel::showDialog, 
+                        onClick = viewModel::showCreateDialog,
                         enabled = !uiState.isLoading
                     ) { Text("Create Color") }
+
+                    Button(
+                        onClick = viewModel::showValidateDialog,
+                        enabled = !uiState.isLoading
+                    ) { Text("Validate & Save Payload") }
                 }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text("Switch API mode:", style = MaterialTheme.typography.titleLarge)
-                Switch(
-                    checked = state.apiMode.name == "CUSTOM",
-                    onCheckedChange = { globalAppState.toggleApiMode() },
-                    modifier = Modifier.padding(end = 16.dp)
-                )
-            }
         }
-        
+
         uiState.errorMessage?.let { Text(it, color = MaterialTheme.colorScheme.error) }
 
-        if (uiState.isLoading) CircularProgressIndicator()
-        else {
+        if (uiState.isLoading) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+        } else {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(uiState.colors) { color ->
                     Card(modifier = Modifier.fillMaxWidth()) {

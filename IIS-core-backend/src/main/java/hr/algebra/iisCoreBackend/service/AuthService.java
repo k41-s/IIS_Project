@@ -40,7 +40,6 @@ public class AuthService {
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        // Let's grant "Admin" automatically if user registers as "admin" so UI editing works
         if ("admin".equalsIgnoreCase(request.getUsername())) {
             user.setRole(Role.Admin);
         } else {

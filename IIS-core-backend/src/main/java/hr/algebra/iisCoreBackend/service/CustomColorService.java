@@ -34,7 +34,19 @@ public class CustomColorService implements ColorService {
 
     @Override
     public ColorDTO save(ColorDTO colorDto) {
-        Color entity = mapToEntity(colorDto);
+        var existingColorOpt = colorRepository.findById(colorDto.getId());
+
+        Color entity;
+        if (existingColorOpt.isPresent()) {
+            entity = existingColorOpt.get();
+            entity.setName(colorDto.getName());
+            entity.setYear(colorDto.getYear());
+            entity.setColor(colorDto.getColor());
+            entity.setPantone_value(colorDto.getPantone_value());
+        } else {
+            entity = mapToEntity(colorDto);
+        }
+
         Color saved = colorRepository.save(entity);
         return mapToDTO(saved);
     }
