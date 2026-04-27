@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import hr.algebra.iis_client_app.ThemeMode
 import hr.algebra.iis_client_app.globalAppState
 import hr.algebra.iis_client_app.ui.tabs.rest.RestColorsTab
 import hr.algebra.iis_client_app.ui.tabs.graphql.GraphQlColorsTab
@@ -25,6 +26,48 @@ fun DashboardScreen() {
                 actions = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text("API Mode: ${state.apiMode.name}", modifier = Modifier.padding(end = 8.dp))
+                        
+                        // Theme Dropdown Menu
+                        var themeDropdownExpanded by remember { mutableStateOf(false) }
+                        Box(modifier = Modifier.padding(end = 16.dp)) {
+                            OutlinedButton(onClick = { themeDropdownExpanded = true }) {
+                                Text("Theme: ${state.themeMode.name}")
+                            }
+                            DropdownMenu(
+                                expanded = themeDropdownExpanded,
+                                onDismissRequest = { themeDropdownExpanded = false }
+                            ) {
+                                DropdownMenuItem(
+                                    text = { Text("System Default") },
+                                    onClick = { 
+                                        globalAppState.setThemeMode(ThemeMode.SYSTEM)
+                                        themeDropdownExpanded = false
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text("Light") },
+                                    onClick = { 
+                                        globalAppState.setThemeMode(ThemeMode.LIGHT)
+                                        themeDropdownExpanded = false
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text("Dark") },
+                                    onClick = { 
+                                        globalAppState.setThemeMode(ThemeMode.DARK)
+                                        themeDropdownExpanded = false
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text("Black & White") },
+                                    onClick = { 
+                                        globalAppState.setThemeMode(ThemeMode.MONOCHROME)
+                                        themeDropdownExpanded = false
+                                    }
+                                )
+                            }
+                        }
+
                         Button(onClick = { globalAppState.logout() }, modifier = Modifier.padding(end = 16.dp)) {
                             Text("Logout")
                         }

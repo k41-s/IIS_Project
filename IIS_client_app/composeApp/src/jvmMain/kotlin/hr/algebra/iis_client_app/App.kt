@@ -1,6 +1,5 @@
 package hr.algebra.iis_client_app
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -9,12 +8,13 @@ import hr.algebra.iis_client_app.api.AuthApi
 import hr.algebra.iis_client_app.ui.DashboardScreen
 import hr.algebra.iis_client_app.ui.auth.AuthenticationScreen
 import hr.algebra.iis_client_app.ui.auth.AuthenticationViewModel
+import hr.algebra.iis_client_app.ui.theme.AppTheme
 
 @Composable
 fun App() {
     val state by globalAppState.state.collectAsState()
 
-    MaterialTheme {
+    AppTheme(themeMode = state.themeMode) {
         if (state.accessToken == null) {
             // Instantiate dependencies (normally handled by a DI framework like Koin)
             val client = remember { createHttpClient(globalAppState) }

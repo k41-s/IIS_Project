@@ -6,7 +6,7 @@ import androidx.compose.ui.window.application
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "iis_client_app",
+        title = "IIS Unified Client",
     ) {
         App()
     }

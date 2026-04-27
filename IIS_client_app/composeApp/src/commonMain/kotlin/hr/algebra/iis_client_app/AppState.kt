@@ -18,17 +18,24 @@ enum class UserRole {
         get() = this == FULL_ACCESS
 }
 
+enum class ThemeMode {
+    SYSTEM,
+    LIGHT,
+    DARK,
+    MONOCHROME
+}
+
 data class AppState(
     val accessToken: String? = null,
     val refreshToken: String? = null,
     val role: UserRole = UserRole.GUEST,
-    val apiMode: ApiMode = ApiMode.PUBLIC
+    val apiMode: ApiMode = ApiMode.PUBLIC,
+    val themeMode: ThemeMode = ThemeMode.SYSTEM
 )
 
 class AppStateManager {
     private val _state = MutableStateFlow(AppState())
     val state: StateFlow<AppState> = _state.asStateFlow()
-
 
     init {
         val savedAccess = TokenStorage.getAccessToken()
@@ -68,6 +75,10 @@ class AppStateManager {
     fun toggleApiMode() {
         val newMode = if (_state.value.apiMode == ApiMode.PUBLIC) ApiMode.CUSTOM else ApiMode.PUBLIC
         _state.value = _state.value.copy(apiMode = newMode)
+    }
+    
+    fun setThemeMode(mode: ThemeMode) {
+        _state.value = _state.value.copy(themeMode = mode)
     }
 }
 
