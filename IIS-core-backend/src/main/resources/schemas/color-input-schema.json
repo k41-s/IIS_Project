@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PantoneColor",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "The Pantone ID"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the color"
+    },
+    "year": {
+      "type": "integer",
+      "minimum": 1900,
+      "maximum": 2100
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#([A-Fa-f0-9]{6})$",
+      "description": "The Hex code of the color"
+    },
+    "pantone_value": {
+      "type": "string"
+    }
+  },
+  "required": ["id", "name", "year", "color", "pantone_value"],
+  "additionalProperties": false
+}

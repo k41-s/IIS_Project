@@ -1,0 +1,27 @@
+type Color {
+    internalId: ID
+    id: Int
+    name: String
+    year: Int
+    color: String
+    pantone_value: String
+}
+
+type Query {
+    getAllColors: [Color]
+    getColorById(id: ID!): Color
+}
+
+type Mutation {
+    createColor(input: ColorInput!): Color
+    updateColor(id: ID!, input: ColorInput!): Color
+    deleteColor(id: ID!): Boolean
+}
+
+input ColorInput {
+    id: Int
+    name: String
+    year: Int
+    color: String
+    pantone_value: String
+}
