@@ -41,3 +41,8 @@ data class GraphQLResponse<T>(
 data class GraphQLError(
     val message: String
 )
+
+@Serializable
+data class RefreshRequest(
+    val refreshToken: String
+)

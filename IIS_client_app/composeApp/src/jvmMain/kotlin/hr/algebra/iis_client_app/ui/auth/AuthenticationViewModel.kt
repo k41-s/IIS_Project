@@ -62,7 +62,7 @@ class AuthenticationViewModel(
                 }
 
                 val resolvedRole = extractRoleFromJwt(response.accessToken)
-                appStateManager.setTokenAndRole(response.accessToken, resolvedRole)
+                appStateManager.setTokensAndRole(response.accessToken, response.refreshToken, resolvedRole)
                 
             } catch (e: Exception) {
                 val errorMsg = if (currentState.isRegisterMode) {
