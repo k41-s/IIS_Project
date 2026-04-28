@@ -39,14 +39,14 @@ Because this project relies heavily on gRPC and Protobuf, you must generate the 
 ### 1. Start the Weather Service (gRPC)
 Open the `IIS-weather-service` folder as a project in IntelliJ IDEA.
 
-**Generate Protobuf Stubs:** 1. Open the Maven tool window (usually on the right side of the screen).
+**Generate Protobuf Stubs:** 
+1. Open the Maven tool window (usually on the right side of the screen).
 2. Expand `IIS-weather-service` > `Plugins` > `protobuf`.
 3. Double-click `protobuf:compile`, wait for it to finish, then double-click `protobuf:compile-custom`.
 *(Alternatively, just double-click `Lifecycle` > `compile` which usually triggers the generation).*
 
 **Run the Server:**
-1. Open `src/main/java/.../IisWeatherServiceApplication.java`.
-2. Click the green Play button next to the public class or main method.
+1. Click the green Play button at the top of the IntelliJ window
    *The gRPC server will start on port 9091.*
 
 ### 2. Start the Core Backend
@@ -57,8 +57,7 @@ Open the `IIS-core-backend` folder as a project in IntelliJ IDEA.
 2. Expand `IIS-core-backend` > `Lifecycle` and double-click `compile` to ensure all JAXB classes and dependencies are generated.
 
 **Run the Server:**
-1. Open `src/main/java/.../IisCoreBackendApplication.java`.
-2. Click the green Play button next to the main method.
+1. Click the green Play button at the top of the IntelliJ window.
    *The core backend will start on port 8080.*
 
 ### 3. Start the Desktop Client
@@ -70,8 +69,7 @@ Open the `IIS_client_app` folder as a project in IntelliJ IDEA. Let the initial 
 3. Double-click `generateProto` (or double-click `build` if `generateProto` is not visible).
 
 **Run the Desktop Application:**
-1. Navigate to `composeApp/src/jvmMain/kotlin/hr/algebra/iis_client_app/main.kt`.
-2. Click the green Play button next to `fun main()`.
+1. Click the green Play button at the top of the IntelliJ window.
 
 ## Authentication & Access Control
 
