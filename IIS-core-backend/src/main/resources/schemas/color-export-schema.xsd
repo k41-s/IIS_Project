@@ -6,7 +6,6 @@
                 <xs:element name="item" maxOccurs="unbounded" minOccurs="0">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="internalId" type="xs:integer"/>
                             <xs:element name="id" type="xs:integer"/>
                             <xs:element name="name" type="xs:string"/>
                             <xs:element name="year" type="xs:integer"/>

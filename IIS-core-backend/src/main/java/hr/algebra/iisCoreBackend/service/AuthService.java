@@ -39,12 +39,7 @@ public class AuthService {
         var user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        if ("admin".equalsIgnoreCase(request.getUsername())) {
-            user.setRole(Role.Admin);
-        } else {
-            user.setRole(Role.User);
-        }
+        user.setRole(Role.User);
 
         userRepository.save(user);
         return generateAuthResponse(user.getUsername(), user.getRole().name());

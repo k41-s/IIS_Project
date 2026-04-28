@@ -97,11 +97,22 @@ class RestColorsViewModel(
         viewModelScope.launch {
             try {
                 colorApi.validateAndSave(payload, isXml)
-                _uiState.update { it.copy(validationMessage = "Success: Data validated and saved!", isLoading = false) }
+                _uiState.update { 
+                    it.copy(
+                        validationMessage = null, 
+                        showValidateDialog = false,
+                        snackbarMessage = "Success: Payload validated and saved!",
+                        isLoading = false
+                    ) 
+                }
                 fetchColors()
             } catch (e: Exception) {
                 _uiState.update { it.copy(validationMessage = "Validation Failed: ${e.message}", isLoading = false) }
             }
         }
+    }
+
+    fun clearSnackbarMessage() {
+        _uiState.update { it.copy(snackbarMessage = null) }
     }
 }

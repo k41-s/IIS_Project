@@ -9,5 +9,6 @@ data class RestColorsUiState(
     val showCreateDialog: Boolean = false,
     val colorToUpdate: ColorDTO? = null,
     val showValidateDialog: Boolean = false,
-    val validationMessage: String? = null
+    val validationMessage: String? = null,
+    val snackbarMessage: String? = null
 )

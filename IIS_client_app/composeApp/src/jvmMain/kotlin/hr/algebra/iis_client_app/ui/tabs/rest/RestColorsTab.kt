@@ -21,8 +21,17 @@ fun RestColorsTab() {
     val uiState by viewModel.uiState.collectAsState()
     val state by globalAppState.state.collectAsState()
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
     LaunchedEffect(state.apiMode) {
         viewModel.fetchColors()
+    }
+
+    LaunchedEffect(uiState.snackbarMessage) {
+        uiState.snackbarMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.clearSnackbarMessage()
+        }
     }
 
     if (uiState.showCreateDialog) {
@@ -48,78 +57,63 @@ fun RestColorsTab() {
         )
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
+                
                 Text("REST Colors API", style = MaterialTheme.typography.titleLarge)
+                Spacer(modifier = Modifier.height(16.dp))
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Switch API mode:", style = MaterialTheme.typography.bodyLarge)
-                    Spacer(Modifier.width(8.dp))
-                    Switch(
-                        checked = state.apiMode == ApiMode.CUSTOM,
-                        onCheckedChange = { globalAppState.toggleApiMode() },
-                        modifier = Modifier.padding(end = 16.dp)
-                    )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(onClick = viewModel::fetchColors, enabled = !uiState.isLoading) {
+                        Text("Refresh")
+                    }
+
+                    if (state.role.canEdit && state.apiMode == ApiMode.CUSTOM) {
+                        Button(
+                            onClick = viewModel::showCreateDialog,
+                            enabled = !uiState.isLoading
+                        ) { Text("Create Color") }
+
+                        Button(
+                            onClick = viewModel::showValidateDialog,
+                            enabled = !uiState.isLoading
+                        ) { Text("Validate & Save Payload") }
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            uiState.errorMessage?.let { Text(it, color = MaterialTheme.colorScheme.error) }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(onClick = viewModel::fetchColors, enabled = !uiState.isLoading) {
-                    Text("Refresh")
-                }
+            if (uiState.isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            } else {
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(uiState.colors) { color ->
+                        Card(modifier = Modifier.fillMaxWidth()) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column {
+                                    Text("ID: ${color.id} - ${color.name}", style = MaterialTheme.typography.titleMedium)
+                                    Text("Year: ${color.year} | Hex: ${color.color} | Pantone: ${color.pantone_value}")
+                                }
 
-                if (state.role.canEdit && state.apiMode == ApiMode.CUSTOM) {
-                    Button(
-                        onClick = viewModel::showCreateDialog,
-                        enabled = !uiState.isLoading
-                    ) { Text("Create Color") }
-
-                    Button(
-                        onClick = viewModel::showValidateDialog,
-                        enabled = !uiState.isLoading
-                    ) { Text("Validate & Save Payload") }
-                }
-            }
-        }
-
-        uiState.errorMessage?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-
-        if (uiState.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-        } else {
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(uiState.colors) { color ->
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(16.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column {
-                                Text("ID: ${color.id} - ${color.name}", style = MaterialTheme.typography.titleMedium)
-                                Text("Year: ${color.year} | Hex: ${color.color} | Pantone: ${color.pantone_value}")
-                            }
-
-                            if (state.role.canEdit && state.apiMode == ApiMode.CUSTOM) {
-                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Button(
-                                        onClick = { viewModel.showUpdateDialog(color) }
-                                    ) { Text("Update") }
-                                    Button(
-                                        onClick = { viewModel.deleteColor(color.id) }
-                                    ) { Text("Delete") }
+                                if (state.role.canEdit && state.apiMode == ApiMode.CUSTOM) {
+                                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        Button(
+                                            onClick = { viewModel.showUpdateDialog(color) }
+                                        ) { Text("Update") }
+                                        Button(
+                                            onClick = { viewModel.deleteColor(color.id) }
+                                        ) { Text("Delete") }
+                                    }
                                 }
                             }
                         }
@@ -127,5 +121,10 @@ fun RestColorsTab() {
                 }
             }
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 16.dp)
+        )
     }
 }

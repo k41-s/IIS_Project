@@ -7,21 +7,32 @@ import androidx.compose.ui.graphics.Color
 import hr.algebra.iis_client_app.ThemeMode
 
 private val LightColorScheme = lightColorScheme(
-    primary = PrimaryLight,
-    onPrimary = OnPrimaryLight,
-    secondary = SecondaryLight,
-    background = BackgroundLight,
-    surface = SurfaceLight,
-    onBackground = Color.Black,
-    onSurface = Color.Black
+    primary = ColorMidnightBlue,
+    onPrimary = Color.White,
+
+    secondary = ColorBurgundy,
+    onSecondary = Color.White,
+
+    tertiary = ColorDeepPlum,
+    onTertiary = Color.White,
+
+    background = LightBackground,
+    surface = LightSurface,
+    onBackground = ColorMidnightBlue,
+    onSurface = ColorMidnightBlue
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryDark,
-    onPrimary = OnPrimaryDark,
-    secondary = SecondaryDark,
-    background = BackgroundDark,
-    surface = SurfaceDark,
+    primary = ColorBurgundy,
+    onPrimary = Color.White,
+    
+    secondary = ColorDeepPlum,
+    onSecondary = Color.White,
+
+    background = ColorMidnightBlue,
+
+    surface = ColorDarkSlateBlue,
+
     onBackground = Color.White,
     onSurface = Color.White
 )

@@ -8,13 +8,13 @@ import io.ktor.http.*
 class SoapApi(private val client: HttpClient) {
     private val url = "http://localhost:8080/ws"
 
-    suspend fun searchColors(xpathQuery: String): String {
+    suspend fun searchColors(searchTerm: String): String {
         val envelope = """
             <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soap="http://algebra.hr/iisbackend/soap">
                <soapenv:Header/>
                <soapenv:Body>
                   <soap:GetColorRequest>
-                     <soap:xpathQuery>$xpathQuery</soap:xpathQuery>
+                     <soap:searchTerm>$searchTerm</soap:searchTerm>
                   </soap:GetColorRequest>
                </soapenv:Body>
             </soapenv:Envelope>
@@ -26,7 +26,6 @@ class SoapApi(private val client: HttpClient) {
         }
         
         val responseText = response.bodyAsText()
-        // Simple Regex to extract the <ns2:result> content (or similar namespace)
         val regex = "<.*?:result>(.*?)</.*?:result>".toRegex(RegexOption.DOT_MATCHES_ALL)
         val match = regex.find(responseText)
         return match?.groups?.get(1)?.value?.trim() ?: "No result extracted. Raw response: $responseText"

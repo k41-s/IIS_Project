@@ -2,18 +2,15 @@ package hr.algebra.iis_client_app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Colorful Scheme (Deep Violet/Purple)
-val PrimaryLight = Color(0xFF6750A4)
-val OnPrimaryLight = Color.White
-val SecondaryLight = Color(0xFF625B71)
-val BackgroundLight = Color(0xFFF7F2F9)
-val SurfaceLight = Color(0xFFFFFFFF)
+// Custom User Palette
+val ColorMidnightBlue = Color(0xFF191D32)
+val ColorDarkSlateBlue = Color(0xFF282F44)
+val ColorDeepPlum = Color(0xFF453A49)
+val ColorBurgundy = Color(0xFFC37487)
 
-val PrimaryDark = Color(0xFFD0BCFF)
-val OnPrimaryDark = Color(0xFF381E72)
-val SecondaryDark = Color(0xFFCCC2DC)
-val BackgroundDark = Color(0xFF141218)
-val SurfaceDark = Color(0xFF2B2930)
+// Light Theme additions to ensure UI readability/contrast
+val LightBackground = Color(0xFFF5F6F8) // Very light, cool grey to complement the navy
+val LightSurface = Color(0xFFFFFFFF)
 
 // Monochrome Scheme (Strict Black & White)
 val MonoBlack = Color(0xFF000000)

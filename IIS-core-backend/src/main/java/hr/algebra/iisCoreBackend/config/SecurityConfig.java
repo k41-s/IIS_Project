@@ -43,7 +43,6 @@ public class SecurityConfig {
 
                     auth.requestMatchers("/api/auth/**", "/graphiql/**").permitAll();
 
-                    // public api requests are permitted without auth
                     auth.requestMatchers(request -> {
                         String modeHeader = request.getHeader("X-API-Mode");
                         String path = request.getRequestURI();
