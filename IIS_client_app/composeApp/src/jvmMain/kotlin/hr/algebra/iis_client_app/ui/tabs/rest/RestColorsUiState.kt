@@ -1,6 +1,6 @@
 package hr.algebra.iis_client_app.ui.tabs.rest
 
-import hr.algebra.iis_client_app.api.ColorDTO
+import hr.algebra.iis_client_app.api.models.ColorDTO
 
 data class RestColorsUiState(
     val colors: List<ColorDTO> = emptyList(),

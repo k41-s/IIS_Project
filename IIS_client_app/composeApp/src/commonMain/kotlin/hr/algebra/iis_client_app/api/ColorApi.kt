@@ -1,5 +1,6 @@
 package hr.algebra.iis_client_app.api
 
+import hr.algebra.iis_client_app.api.models.ColorDTO
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -32,7 +33,7 @@ class ColorApi(private val client: HttpClient) {
     }
 
     suspend fun validateAndSave(payload: String, isXml: Boolean = false) {
-        val type = if (isXml) ContentType.Text.Xml else ContentType.Application.Json
+        val type = if (isXml) ContentType.Application.Xml else ContentType.Application.Json
         val response = client.post("$baseUrl/colors/validate-and-save") {
             contentType(type)
             setBody(payload)

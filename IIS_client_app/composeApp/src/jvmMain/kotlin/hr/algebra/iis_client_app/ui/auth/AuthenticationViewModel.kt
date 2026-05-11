@@ -3,7 +3,7 @@ package hr.algebra.iis_client_app.ui.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import hr.algebra.iis_client_app.api.AuthApi
-import hr.algebra.iis_client_app.api.LoginRequest
+import hr.algebra.iis_client_app.api.models.LoginRequest
 import hr.algebra.iis_client_app.AppStateManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

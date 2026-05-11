@@ -3,7 +3,7 @@ package hr.algebra.iis_client_app.ui.tabs.rest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import hr.algebra.iis_client_app.api.ColorApi
-import hr.algebra.iis_client_app.api.ColorDTO
+import hr.algebra.iis_client_app.api.models.ColorDTO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

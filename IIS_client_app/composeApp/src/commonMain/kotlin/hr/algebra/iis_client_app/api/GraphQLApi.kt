@@ -1,5 +1,8 @@
 package hr.algebra.iis_client_app.api
 
+import hr.algebra.iis_client_app.api.models.ColorDTO
+import hr.algebra.iis_client_app.api.models.GraphQLRequest
+import hr.algebra.iis_client_app.api.models.GraphQLResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -9,8 +12,11 @@ import kotlinx.serialization.json.*
 class GraphQLApi(private val client: HttpClient) {
     private val url = "http://localhost:8080/graphql"
 
-    suspend fun getAllColors(): GraphQLResponse<JsonElement> {
-        val request = GraphQLRequest(query = "query { getAllColors { id name year color pantone_value } }")
+    suspend fun getAllColors(selectedFields: Set<String>): GraphQLResponse<JsonElement> {
+        val fieldsString = selectedFields.joinToString(" ")
+
+        val request = GraphQLRequest(query = "query { getAllColors { $fieldsString } }")
+
         return client.post(url) {
             contentType(ContentType.Application.Json)
             setBody(request)

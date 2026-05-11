@@ -3,9 +3,8 @@ package hr.algebra.iis_client_app.ui.tabs.rest
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import hr.algebra.iis_client_app.api.ColorDTO
+import hr.algebra.iis_client_app.api.models.ColorDTO
 
 @Composable
 fun CreateColorDialog(

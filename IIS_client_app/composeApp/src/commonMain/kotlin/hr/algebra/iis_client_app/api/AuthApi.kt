@@ -1,5 +1,7 @@
 package hr.algebra.iis_client_app.api
 
+import hr.algebra.iis_client_app.api.models.AuthResponse
+import hr.algebra.iis_client_app.api.models.LoginRequest
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*

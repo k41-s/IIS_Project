@@ -20,8 +20,11 @@ fun GraphQlColorsTab() {
     val viewModel = remember { GraphQlColorsViewModel(graphQLApi) }
     val uiState by viewModel.uiState.collectAsState()
     val state by globalAppState.state.collectAsState()
-    
+
     val scrollState = rememberScrollState()
+
+    var fieldsDropdownExpanded by remember { mutableStateOf(false) }
+    val availableFields = listOf("id", "name", "year", "color", "pantone_value")
 
     if (uiState.showCreateDialog) {
         CreateColorDialog(
@@ -36,11 +39,59 @@ fun GraphQlColorsTab() {
             .verticalScroll(scrollState)
             .padding(bottom = 24.dp)
     ) {
-        Text("GraphQL Colors API", style = MaterialTheme.typography.titleLarge)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("GraphQL Colors API", style = MaterialTheme.typography.titleLarge)
+
+            Surface(
+                color = MaterialTheme.colorScheme.errorContainer,
+                shape = MaterialTheme.shapes.small
+            ) {
+                Text(
+                    text = "Uses Custom API Only",
+                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                )
+            }
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
+
+        Text("Select Fields to Query:", style = MaterialTheme.typography.labelLarge)
+        Box(modifier = Modifier.padding(vertical = 8.dp)) {
+            OutlinedButton(onClick = { fieldsDropdownExpanded = true }) {
+                Text("Selected Fields (${uiState.selectedFields.size}/5) ▼")
+            }
+
+            DropdownMenu(
+                expanded = fieldsDropdownExpanded,
+                onDismissRequest = { fieldsDropdownExpanded = false }
+            ) {
+                availableFields.forEach { field ->
+                    DropdownMenuItem(
+                        text = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Checkbox(
+                                    checked = uiState.selectedFields.contains(field),
+                                    onCheckedChange = null
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(field)
+                            }
+                        },
+                        onClick = { viewModel.toggleField(field) }
+                    )
+                }
+            }
+        }
+
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(onClick = viewModel::getAllColors, enabled = !uiState.isLoading) {
-                Text("Get All Colors (Query)")
+                Text("Get All Colors (Dynamic Query)")
             }
 
             if (state.role.canEdit) {
@@ -66,10 +117,30 @@ fun GraphQlColorsTab() {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column {
-                                Text("ID: ${color.id} - ${color.name}", style = MaterialTheme.typography.titleMedium)
-                                Text("Year: ${color.year} | Hex: ${color.color} | Pantone: ${color.pantone_value}")
+                                if ("id" in uiState.selectedFields || "name" in uiState.selectedFields) {
+                                    val titleParts = mutableListOf<String>()
+                                    if ("id" in uiState.selectedFields) titleParts.add("ID: ${color.id}")
+                                    if ("name" in uiState.selectedFields) titleParts.add(color.name)
+
+                                    Text(
+                                        text = titleParts.joinToString(" - "),
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                }
+
+                                val subtitleParts = mutableListOf<String>()
+                                if ("year" in uiState.selectedFields)
+                                    subtitleParts.add("Year: ${color.year}")
+                                if ("color" in uiState.selectedFields)
+                                    subtitleParts.add("Hex: ${color.color}")
+                                if ("pantone_value" in uiState.selectedFields)
+                                    subtitleParts.add("Pantone: ${color.pantone_value}")
+
+                                if (subtitleParts.isNotEmpty()) {
+                                    Text(text = subtitleParts.joinToString(" | "))
+                                }
                             }
-                            
+
                             if (state.role.canEdit) {
                                 Button(
                                     onClick = { viewModel.deleteColor(color.id) },
