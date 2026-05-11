@@ -41,7 +41,7 @@ public class SecurityConfig {
                     auth.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll();
                     auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
 
-                    auth.requestMatchers("/api/auth/**", "/graphiql/**", "/ws/").permitAll();
+                    auth.requestMatchers("/api/auth/**", "/graphiql/**", "/ws/**").permitAll();
 
                     auth.requestMatchers(request -> {
                         String modeHeader = request.getHeader("X-API-Mode");
